@@ -38,7 +38,7 @@ class ImagesListViewController: UIViewController {
         formatter.dateStyle = .long
         formatter.timeStyle = .none
         return formatter
-    }()
+    } ()
 }
 
 extension ImagesListViewController: UITableViewDataSource {
