@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="PwZ-Ro-5qZ">
-                                <rect key="frame" x="0.0" y="59" width="414" height="754"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <color key="backgroundColor" red="0.1019607843" green="0.1058823529" blue="0.1333333333" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationWidth="10" reuseIdentifier="ImagesListCell" rowHeight="224" id="gB4-ew-bQb" customClass="ImagesListCell" customModule="ImageFeed" customModuleProvider="target">
@@ -81,8 +81,8 @@
                         <constraints>
                             <constraint firstItem="PwZ-Ro-5qZ" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="LlF-hJ-ZgW"/>
                             <constraint firstAttribute="trailing" secondItem="PwZ-Ro-5qZ" secondAttribute="trailing" id="aRY-Ff-xay"/>
-                            <constraint firstAttribute="bottom" secondItem="PwZ-Ro-5qZ" secondAttribute="bottom" constant="83" id="mYR-bj-SlL"/>
-                            <constraint firstItem="PwZ-Ro-5qZ" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="59" id="sC4-pU-XSH"/>
+                            <constraint firstAttribute="bottom" secondItem="PwZ-Ro-5qZ" secondAttribute="bottom" id="mYR-bj-SlL"/>
+                            <constraint firstItem="PwZ-Ro-5qZ" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="sC4-pU-XSH"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="" image="tab_editorial_active" id="5fw-uA-ExF"/>
@@ -94,7 +94,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="10" y="853"/>
+            <point key="canvasLocation" x="8.6956521739130448" y="852.45535714285711"/>
         </scene>
         <!--Single Image View Controller-->
         <scene sceneID="dFj-nB-NmJ">
