@@ -6,69 +6,133 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
+    private var label: UILabel?
+    private let profileService = ProfileService.shared
+    private var profileImageServiceObserver: NSObjectProtocol?
     
-    private let image = UIImageView()
-    private let labelName = UILabel()
-    private let labelNickname = UILabel()
-    private let labelStatus = UILabel()
-    private let button = UIButton.systemButton(with: UIImage(systemName: "ipad.and.arrow.forward")!, target: ProfileViewController.self, action: nil)
+    private lazy var imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    private lazy var labelName: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor(named: "YP White")
+        label.font = .boldSystemFont(ofSize: 23)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var labelSocial: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor(named: "YP Grey")
+        label.font = .systemFont(ofSize: 13)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private lazy var buttonView = UIView()
+    private lazy var button: UIButton = {
+        let button = UIButton.systemButton(
+            with: UIImage(systemName: "ipad.and.arrow.forward", withConfiguration: UIImage.SymbolConfiguration(pointSize: 16, weight: .semibold))!,
+            target: self,
+            action: #selector(Self.didTapButton)
+        )
+        
+        button.tintColor = UIColor(named: "YP Red")
+        
+        button.translatesAutoresizingMaskIntoConstraints = false
+        buttonView.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    private lazy var labelText: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor(named: "YP White")
+        label.font = .systemFont(ofSize: 13)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         addSubviews()
-        setViewConfiguration()
-        activateConstraints()
+        profileView()
+        updateAvatar()
+        updateProfileDetails()
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(forName: ProfileImageService.DidChangeNotification,
+                         object: nil,
+                         queue: .main
+            ) { [weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()
+            }
     }
     
     private func addSubviews() {
-        view.addSubview(image)
+        view.addSubview(imageView)
         view.addSubview(labelName)
-        view.addSubview(labelNickname)
-        view.addSubview(labelStatus)
-        view.addSubview(button)
-        
-        image.translatesAutoresizingMaskIntoConstraints = false
-        labelName.translatesAutoresizingMaskIntoConstraints = false
-        labelNickname.translatesAutoresizingMaskIntoConstraints = false
-        labelStatus.translatesAutoresizingMaskIntoConstraints = false
-        button.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(labelText)
+        view.addSubview(labelSocial)
+        view.addSubview(buttonView)
+        buttonView.addSubview(button)
     }
     
-    private func setViewConfiguration() {
-        image.image = UIImage(named: "avatar")
-        
-        labelName.text = "Екатерина Новикова"
-        labelName.textColor = UIColor(named: "YP White")
-        labelName.font = labelName.font.withSize(23)
-        
-        labelNickname.text = "@ekaterina_nov"
-        labelNickname.textColor = UIColor(named: "YP Grey")
-        labelNickname.font = labelNickname.font.withSize(13)
-        
-        labelStatus.text = "Hello, world"
-        labelStatus.textColor = UIColor(named: "YP White")
-        labelStatus.font = labelStatus.font.withSize(13)
-        
-        button.tintColor = UIColor(named: "YP Red")
-    }
-    
-    private func activateConstraints() {
+    private func profileView() {
         NSLayoutConstraint.activate([
-            image.heightAnchor.constraint(equalToConstant: 70),
-            image.widthAnchor.constraint(equalToConstant: 70),
-            image.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            image.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            labelName.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 8),
-            labelName.leadingAnchor.constraint(equalTo: image.leadingAnchor),
-            labelNickname.topAnchor.constraint(equalTo: labelName.bottomAnchor, constant: 8),
-            labelNickname.leadingAnchor.constraint(equalTo: labelName.leadingAnchor),
-            labelStatus.topAnchor.constraint(equalTo: labelNickname.bottomAnchor, constant: 8),
-            labelStatus.leadingAnchor.constraint(equalTo: labelName.leadingAnchor),
-            button.centerYAnchor.constraint(equalTo: image.centerYAnchor),
-            button.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20)
+            
+            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            imageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 76),
+            imageView.widthAnchor.constraint(equalToConstant: 70),
+            imageView.heightAnchor.constraint(equalToConstant: 70),
+            
+            
+            labelName.leadingAnchor.constraint(equalTo: imageView.leadingAnchor),
+            labelName.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
+            
+            
+            labelSocial.leadingAnchor.constraint(equalTo: imageView.leadingAnchor),
+            labelSocial.topAnchor.constraint(equalTo: labelName.bottomAnchor, constant: 8),
+            
+            
+            labelText.leadingAnchor.constraint(equalTo: imageView.leadingAnchor),
+            labelText.topAnchor.constraint(equalTo: labelSocial.bottomAnchor, constant: 8),
+            
+            
+            buttonView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            buttonView.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),
+            buttonView.widthAnchor.constraint(equalToConstant: 44),
+            buttonView.heightAnchor.constraint(equalToConstant: 44),
+            
+            
+            button.leadingAnchor.constraint(equalTo: buttonView.leadingAnchor, constant: 16),
+            button.centerYAnchor.constraint(equalTo: buttonView.centerYAnchor),
         ])
+    }
+    
+    private func updateAvatar() {
+        view.backgroundColor = UIColor(named: "YP Black")
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        let processor = RoundCornerImageProcessor(cornerRadius: 35, backgroundColor: .clear)
+        imageView.kf.indicatorType = .activity
+        imageView.kf.setImage(with: url, placeholder: UIImage(named: "placeholder"), options: [.processor(processor), .cacheSerializer(FormatIndicatedCacheSerializer.png)])
+    }
+    
+    private func updateProfileDetails() {
+        labelName.text = profileService.profile?.name
+        labelSocial.text = profileService.profile?.loginName
+        labelText.text = profileService.profile?.bio
+    }
+    
+    @objc private func didTapButton() {
+        OAuth2TokenStorage().token = nil
     }
 }
