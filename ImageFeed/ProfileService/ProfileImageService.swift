@@ -24,6 +24,12 @@ final class ProfileImageService {
     static let shared = ProfileImageService()
     private (set) var avatarURL: String?
     private var task: URLSessionTask?
+    
+    func clean() {
+        avatarURL = nil
+        task?.cancel()
+        task = nil
+    }
 }
 
 extension ProfileImageService {
@@ -35,6 +41,7 @@ extension ProfileImageService {
         
         guard let username = username else { return }
         guard let request = fetchProfileImageRequest(token, username: username) else { return }
+        
         
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
             guard let self = self else { return }
@@ -49,7 +56,6 @@ extension ProfileImageService {
                 completion(.failure(error))
             }
         }
-        
         self.task = task
         task?.resume()
     }
@@ -64,3 +70,4 @@ extension ProfileImageService {
         return request
     }
 }
+

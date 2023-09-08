@@ -33,6 +33,12 @@ final class ProfileService {
     static let shared = ProfileService()
     private (set) var profile: Profile?
     private var task: URLSessionTask?
+    
+    func clean() {
+        profile = nil
+        task?.cancel()
+        task = nil
+    }
 }
 
 extension ProfileService {
@@ -58,7 +64,6 @@ extension ProfileService {
                 completion(.failure(error))
             }
         }
-        
         self.task = task
         task?.resume()
     }
@@ -73,4 +78,3 @@ extension ProfileService {
         return request
     }
 }
-

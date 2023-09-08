@@ -60,7 +60,6 @@ extension OAuth2Service {
                 completion(.failure(error))
             }
         }
-        
         self.task = task
         task?.resume()
     }
@@ -78,4 +77,3 @@ extension OAuth2Service {
             baseURL: url)
     }
 }
-
