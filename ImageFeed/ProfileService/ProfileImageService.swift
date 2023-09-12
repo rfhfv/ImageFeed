@@ -42,7 +42,6 @@ extension ProfileImageService {
         guard let username = username else { return }
         guard let request = fetchProfileImageRequest(token, username: username) else { return }
         
-        
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
             guard let self = self else { return }
             self.task = nil
@@ -70,4 +69,5 @@ extension ProfileImageService {
         return request
     }
 }
+
 
