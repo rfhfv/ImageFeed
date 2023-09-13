@@ -18,7 +18,6 @@ final class ImageFeedUITestsNew: XCTestCase {
     }
     
     func testAuth() throws {
-        
         app.buttons["Authenticate"].tap()
         
         let webView = app.webViews["UnsplashWebView"]
@@ -29,14 +28,14 @@ final class ImageFeedUITestsNew: XCTestCase {
         sleep(5)
         
         loginTextField.tap()
-        loginTextField.typeText("<Ваш e-mail>")
+        loginTextField.typeText("")
         loginTextField.swipeUp()
         
         let passwordTextField = webView.descendants(matching: .secureTextField).element
         sleep(5)
         
         passwordTextField.tap()
-        passwordTextField.typeText("<Ваш пароль>")
+        passwordTextField.typeText("")
         webView.swipeUp()
         
         // Нажать кнопку логина
@@ -79,6 +78,7 @@ final class ImageFeedUITestsNew: XCTestCase {
         navBackButtonWhiteButton.tap()
     }
     
+    
     func testProfile() throws {
         let tablesQuery = app.tables
         
@@ -99,6 +99,8 @@ final class ImageFeedUITestsNew: XCTestCase {
         sleep(2)
         XCTAssertTrue(app.buttons["Authenticate"].exists)
     }
+    
 }
+
 
 
