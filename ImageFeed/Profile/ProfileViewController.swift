@@ -9,7 +9,14 @@ import UIKit
 import Kingfisher
 import WebKit
 
-final class ProfileViewController: UIViewController {
+
+public protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfileViewPresenterProtocol? { get set }
+    func switchToSplashViewController()
+}
+
+final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
+    var presenter: ProfileViewPresenterProtocol?
     private var label: UILabel?
     private let profileService = ProfileService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
@@ -19,7 +26,6 @@ final class ProfileViewController: UIViewController {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-    
     private lazy var labelName: UILabel = {
         let label = UILabel()
         label.textColor = UIColor(named: "YP White")
@@ -43,7 +49,7 @@ final class ProfileViewController: UIViewController {
             target: self,
             action: #selector(Self.didTapButton)
         )
-        
+        button.accessibilityIdentifier = "logoutButton"
         button.tintColor = UIColor(named: "YP Red")
         
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -58,6 +64,8 @@ final class ProfileViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,6 +83,11 @@ final class ProfileViewController: UIViewController {
             }
     }
     
+    func configure(_ presenter: ProfileViewPresenterProtocol) {
+        self.presenter = presenter
+        self.presenter?.view = self
+    }
+    
     private func addSubviews() {
         view.addSubview(imageView)
         view.addSubview(labelName)
@@ -82,8 +95,8 @@ final class ProfileViewController: UIViewController {
         view.addSubview(labelSocial)
         view.addSubview(buttonView)
         buttonView.addSubview(button)
+        
     }
-    
     private func profileView() {
         NSLayoutConstraint.activate([
             
@@ -105,18 +118,19 @@ final class ProfileViewController: UIViewController {
             labelText.topAnchor.constraint(equalTo: labelSocial.bottomAnchor, constant: 8),
             
             
+            
+            
             buttonView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             buttonView.centerYAnchor.constraint(equalTo: imageView.centerYAnchor),
             buttonView.widthAnchor.constraint(equalToConstant: 44),
             buttonView.heightAnchor.constraint(equalToConstant: 44),
-            
             
             button.leadingAnchor.constraint(equalTo: buttonView.leadingAnchor, constant: 16),
             button.centerYAnchor.constraint(equalTo: buttonView.centerYAnchor),
         ])
     }
     
-    private func updateAvatar() {
+    func updateAvatar() {
         view.backgroundColor = UIColor(named: "YP Black")
         guard
             let profileImageURL = ProfileImageService.shared.avatarURL,
@@ -148,7 +162,7 @@ final class ProfileViewController: UIViewController {
         HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
         WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
             records.forEach { record in
-                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {} )
+                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
             }
         }
     }
@@ -159,7 +173,7 @@ final class ProfileViewController: UIViewController {
         ProfileImageService.shared.clean()
     }
     
-    private func switchToSplashViewController() {
+    func switchToSplashViewController() {
         guard let window = UIApplication.shared.windows.first else {
             assertionFailure("Invalid Configuration")
             return
@@ -172,11 +186,19 @@ final class ProfileViewController: UIViewController {
             title: "Пока, пока!",
             message: "Уверены, что хотите выйти?",
             preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "Да", style: .default, handler: { [weak self] action in
+        
+        let yesAction = UIAlertAction(title: "Да", style: .default) { [weak self] action in
             guard let self = self else { return }
             self.logout()
-        }))
-        alertController.addAction(UIAlertAction(title: "Нет", style: .default, handler: nil))
-        present(alertController, animated:  true, completion: nil)
+        }
+        yesAction.accessibilityIdentifier = "Yes"
+        
+        let noAction = UIAlertAction(title: "Нет", style: .default, handler: nil)
+        noAction.accessibilityIdentifier = "No"
+        alertController.addAction(yesAction)
+        alertController.addAction(noAction)
+        
+        present(alertController, animated: true, completion: nil)
     }
+    
 }

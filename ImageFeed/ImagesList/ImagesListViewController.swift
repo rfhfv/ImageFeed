@@ -6,8 +6,15 @@
 //
 
 import UIKit
+import Kingfisher
 
-class ImagesListViewController: UIViewController {
+
+public protocol ImagesListViewControllerProtocol: AnyObject {
+    var presenter: ImagesListViewPresenterProtocol? { get set }
+}
+
+final class ImagesListViewController: UIViewController, ImagesListViewControllerProtocol {
+    var presenter: ImagesListViewPresenterProtocol?
     
     @IBOutlet private var tableView: UITableView!
     
@@ -52,12 +59,17 @@ class ImagesListViewController: UIViewController {
         }
     }
     
+    func configure(_ presenter: ImagesListViewPresenterProtocol) {
+        self.presenter = presenter
+        self.presenter?.view = self
+    }
+    
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         if let urlString = imagesListService.photos[indexPath.row].thumbImageURL,
            let imagesURL = URL(string: urlString) {
             cell.cellImage.kf.indicatorType = .activity
             cell.cellImage.kf.setImage(with: imagesURL,
-                                       placeholder: UIImage(named: "scribble")) { [weak self] _ in
+                                           placeholder: UIImage(named: "scribble")) { [weak self] _ in
                 guard let self = self else { return }
                 self.tableView.reloadRows(at: [indexPath], with: .automatic)
             }

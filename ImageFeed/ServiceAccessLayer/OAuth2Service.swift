@@ -44,7 +44,7 @@ extension OAuth2Service {
         if lastCode == code { return }
         task?.cancel()
         lastCode = code
-        
+  
         guard let request = authTokenRequest(code: code) else { return }
         
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
