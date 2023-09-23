@@ -9,20 +9,20 @@ import Foundation
 import SwiftKeychainWrapper
 
 final class OAuth2TokenStorage {
-    private let kToken = "token"
+    private let keyToken = "token"
     var token: String? {
         set {
             guard let token = newValue else {
-                KeychainWrapper.standard.removeObject(forKey: kToken)
+                KeychainWrapper.standard.removeObject(forKey: keyToken)
                 return
             }
-            let isSuccess = KeychainWrapper.standard.set(token, forKey: kToken)
+            let isSuccess = KeychainWrapper.standard.set(token, forKey: keyToken)
             guard isSuccess else {
                 fatalError("Невозможно сохранить token")
             }
         }
         get {
-            KeychainWrapper.standard.string(forKey: kToken)
+            KeychainWrapper.standard.string(forKey: keyToken)
         }
     }
 }

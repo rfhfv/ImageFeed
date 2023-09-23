@@ -8,7 +8,6 @@
 import UIKit
 import Kingfisher
 
-
 public protocol ImagesListViewControllerProtocol: AnyObject {
     var presenter: ImagesListViewPresenterProtocol? { get set }
 }
@@ -69,7 +68,7 @@ final class ImagesListViewController: UIViewController, ImagesListViewController
            let imagesURL = URL(string: urlString) {
             cell.cellImage.kf.indicatorType = .activity
             cell.cellImage.kf.setImage(with: imagesURL,
-                                           placeholder: UIImage(named: "scribble")) { [weak self] _ in
+                                       placeholder: UIImage(named: "scribble")) { [weak self] _ in
                 guard let self = self else { return }
                 self.tableView.reloadRows(at: [indexPath], with: .automatic)
             }

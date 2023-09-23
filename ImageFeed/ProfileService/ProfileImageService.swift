@@ -20,7 +20,7 @@ struct ImageURL: Decodable {
 }
 
 final class ProfileImageService {
-    static let DidChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
+    static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     static let shared = ProfileImageService()
     private (set) var avatarURL: String?
     private var task: URLSessionTask?
@@ -42,7 +42,6 @@ extension ProfileImageService {
         guard let username = username else { return }
         guard let request = fetchProfileImageRequest(token, username: username) else { return }
         
-        
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
             guard let self = self else { return }
             self.task = nil
@@ -50,7 +49,7 @@ extension ProfileImageService {
             case .success(let userResult):
                 self.avatarURL = userResult.profileImage?.small
                 NotificationCenter.default
-                    .post(name: ProfileImageService.DidChangeNotification, object: self, userInfo: ["URL" : self.avatarURL ?? ""])
+                    .post(name: ProfileImageService.didChangeNotification, object: self, userInfo: ["URL" : self.avatarURL ?? ""])
                 completion(.success(self.avatarURL))
             case .failure(let error):
                 completion(.failure(error))

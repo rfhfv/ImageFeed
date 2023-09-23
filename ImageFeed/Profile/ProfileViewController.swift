@@ -9,7 +9,6 @@ import UIKit
 import Kingfisher
 import WebKit
 
-
 public protocol ProfileViewControllerProtocol: AnyObject {
     var presenter: ProfileViewPresenterProtocol? { get set }
     func switchToSplashViewController()
@@ -26,6 +25,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
+    
     private lazy var labelName: UILabel = {
         let label = UILabel()
         label.textColor = UIColor(named: "YP White")
@@ -49,6 +49,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
             target: self,
             action: #selector(Self.didTapButton)
         )
+        
         button.accessibilityIdentifier = "logoutButton"
         button.tintColor = UIColor(named: "YP Red")
         
@@ -65,8 +66,6 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         return label
     }()
     
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         addSubviews()
@@ -74,7 +73,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         updateAvatar()
         updateProfileDetails()
         profileImageServiceObserver = NotificationCenter.default
-            .addObserver(forName: ProfileImageService.DidChangeNotification,
+            .addObserver(forName: ProfileImageService.didChangeNotification,
                          object: nil,
                          queue: .main
             ) { [weak self] _ in
@@ -95,8 +94,8 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         view.addSubview(labelSocial)
         view.addSubview(buttonView)
         buttonView.addSubview(button)
-        
     }
+    
     private func profileView() {
         NSLayoutConstraint.activate([
             
@@ -116,8 +115,6 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
             
             labelText.leadingAnchor.constraint(equalTo: imageView.leadingAnchor),
             labelText.topAnchor.constraint(equalTo: labelSocial.bottomAnchor, constant: 8),
-            
-            
             
             
             buttonView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
@@ -200,5 +197,4 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         
         present(alertController, animated: true, completion: nil)
     }
-    
 }

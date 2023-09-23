@@ -13,5 +13,4 @@ public protocol ImagesListViewPresenterProtocol {
 
 final class ImagesListViewPresenter: ImagesListViewPresenterProtocol {
     weak var view: ImagesListViewControllerProtocol?
-
 }

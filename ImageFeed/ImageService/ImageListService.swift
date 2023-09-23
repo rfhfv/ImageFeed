@@ -14,6 +14,7 @@ final class ImagesListService {
     private var lastLoadedPage: Int?
     private let perPage = "10"
     private var task: URLSessionTask?
+    private var likeTask: URLSessionTask?
     
     private let dateFormatter = ISO8601DateFormatter()
     
@@ -86,7 +87,8 @@ extension ImagesListService {
     
     func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
         assert(Thread.isMainThread)
-        task?.cancel()
+        guard likeTask == nil else { return }
+        likeTask?.cancel()
         
         guard let token = OAuth2TokenStorage().token else { return }
         
@@ -98,7 +100,7 @@ extension ImagesListService {
         }
         guard let request = request else { return }
         
-        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<LikePhotoResult, Error>) in
+        let likeTask = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<LikePhotoResult, Error>) in
             guard let self = self else { return }
             self.task = nil
             switch result {
@@ -123,8 +125,8 @@ extension ImagesListService {
                 completion(.failure(error))
             }
         }
-        self.task = task
-        task?.resume()
+        self.likeTask = likeTask
+        likeTask?.resume()
     }
     
     private func postLikeRequest(_ token: String, photoId: String) -> URLRequest? {

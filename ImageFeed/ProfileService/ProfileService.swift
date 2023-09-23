@@ -45,13 +45,10 @@ extension ProfileService {
     
     public func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         
-        
         assert(Thread.isMainThread)
         task?.cancel()
         
-        
         guard let request = fetchProfileRequest(token) else { return }
-        
         
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             guard let self = self else { return }

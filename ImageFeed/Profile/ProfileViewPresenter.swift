@@ -22,7 +22,7 @@ final class ProfileViewPresenter: ProfileViewPresenterProtocol {
     
     func avatarURL() -> URL? {
         guard let profileImageURL = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURL)
+              let url = URL(string: profileImageURL)
         else { return nil }
         return url
     }
@@ -42,7 +42,7 @@ final class ProfileViewPresenter: ProfileViewPresenterProtocol {
         cleanServicesData()
         view?.switchToSplashViewController()
     }
-  
+    
     func cleanServicesData() {
         ImagesListService.shared.clean()
         ProfileService.shared.clean()
@@ -57,5 +57,4 @@ final class ProfileViewPresenter: ProfileViewPresenterProtocol {
             }
         }
     }
-    
 }
