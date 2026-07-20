@@ -1,52 +1,59 @@
 # ImageFeed
 
-iOS app for browsing Unsplash images with OAuth authentication. Features include infinite image feed with like/favorites functionality, full-screen viewing with zoom and share, and user profile. Built with Swift + UIKit and MVP architecture.
+**ImageFeed** — iOS-приложение для просмотра изображений из **Unsplash** с авторизацией через **OAuth 2.0**. 
 
-- [Figma mockup](https://www.figma.com/design/MujlanK7BDoQRrGci5G6pi/Image-Feed)
-- [Unsplash API](https://unsplash.com/documentation)
+Приложение позволяет просматривать бесконечную ленту фотографий, добавлять изображения в избранное, открывать их в полноэкранном режиме с поддержкой жестов, делиться ссылками и просматривать профиль пользователя.
 
-## Screenshots
+## Дизайн и API
+
+- **Макет в Figma:** https://www.figma.com/design/MujlanK7BDoQRrGci5G6pi/Image-Feed
+- **Unsplash API:** https://unsplash.com/documentation
+
+## Скриншоты
 
 ![Image](https://github.com/user-attachments/assets/969f2882-c064-40d8-8055-ecde5378d20c)
 
-## Features
+## Возможности
 
-- **OAuth Authentication:** Secure login via Unsplash OAuth
-- **Infinite Image Feed:** Endless scrolling through Unsplash Editorial images
-- **Like/Favorites:** Add and remove images from favorites
-- **Full-Screen Viewing:** Zoom, pan, and rotate images
-- **Share Images:** Share image links outside the app
-- **User Profile:** View user info, avatar, and favorite images
-- **Offline Support:** Basic error handling with retry option
+- **OAuth-авторизация** — безопасный вход через аккаунт Unsplash.
+- **Бесконечная лента изображений** — просмотр редакционной коллекции Unsplash с автоматической подгрузкой новых фотографий.
+- **Избранное** — добавление и удаление фотографий из списка понравившихся.
+- **Полноэкранный просмотр** — поддержка масштабирования и перемещения изображения с помощью жестов.
+- **Поделиться** — отправка ссылки на фотографию через системное меню iOS.
+- **Профиль пользователя** — отображение информации о пользователе, аватара и количества избранных фотографий.
+- **Обработка ошибок** — уведомление пользователя о сетевых ошибках с возможностью повторить запрос.
 
-## Tech Stack
+## Технический стек
 
-- **UIKit** with programmatic layout
-- **MVP** architecture
-- **URLSession** for networking
-- **Unsplash API** integration
-- **OAuth 2.0** authentication
-- **GCD (Grand Central Dispatch)** for background threading
+- **Swift**
+- **UIKit** (программная верстка)
+- **MVP (Model–View–Presenter)**
+- **URLSession** — выполнение сетевых запросов
+- **Unsplash API**
+- **OAuth 2.0**
+- **Grand Central Dispatch (GCD)** — многопоточность
 
-## Architecture
+## Архитектура
 
-The project follows MVP (Model-View-Presenter) architecture:
+Проект построен на архитектуре **MVP (Model–View–Presenter)**.
 
-- **View:** UIKit views and ViewControllers. Passes user actions to Presenter
-- **Presenter:** Contains business logic, prepares data for View
-- **Model:** Data models and API service layer
-- **Helpers:** OAuth token storage (Keychain), image caching
+- **View** — экраны приложения на UIKit, отвечающие за отображение данных и передачу пользовательских действий.
+- **Presenter** — бизнес-логика приложения, подготовка данных для отображения и обработка пользовательских событий.
+- **Model** — модели данных и сервисный слой для взаимодействия с Unsplash API.
+- **Helpers** — вспомогательные компоненты для хранения OAuth-токена в **Keychain** и кэширования изображений.
 
-## Key Implementation Details
+## Особенности реализации
 
-- **OAuth Flow:** WebView-based authentication with token storage in Keychain
-- **Image Loading:** Async image loading with caching for smooth scrolling
-- **Pagination:** Infinite scrolling with offset-based pagination
-- **Like/Unlike:** API requests to add or remove favorites
-- **Full-Screen Gestures:** Pinch to zoom and pan support
+- **OAuth Flow** — авторизация через WebView с безопасным хранением токена доступа в **Keychain**.
+- **Асинхронная загрузка изображений** — фотографии загружаются в фоновом режиме с использованием кэширования для плавной прокрутки ленты.
+- **Пагинация** — реализована бесконечная подгрузка изображений по мере прокрутки списка.
+- **Работа с избранным** — добавление и удаление фотографий выполняется через соответствующие запросы к Unsplash API.
+- **Жесты в полноэкранном режиме** — поддерживаются масштабирование (**Pinch-to-Zoom**) и перемещение изображения (**Pan Gesture**).
 
-## Installation
+## Установка
 
-- git clone https://github.com/rfhfv/ImageFeed.git
-- cd ImageFeed
-- open ImageFeed.xcodeproj
+```bash
+git clone https://github.com/rfhfv/ImageFeed.git
+cd ImageFeed
+open ImageFeed.xcodeproj
+```
